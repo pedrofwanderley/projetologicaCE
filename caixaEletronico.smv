@@ -1,0 +1,4 @@
+MODULE main
+VAR
+cartao : boolean;
+op : {saldo,saque,deb,sair};
