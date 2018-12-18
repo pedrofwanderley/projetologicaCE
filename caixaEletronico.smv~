@@ -1,4 +1,38 @@
 MODULE main
 VAR
-cartao : boolean;
-op : {saldo,saque,deb,sair};
+	cartao:         boolean;
+	codigo_conta:   boolean;
+	quantia:        boolean;
+	saldo:          boolean;
+	sair:		booelan;
+	deposito:	boolean;
+	saque:		boolean;
+	location :      {idle,operacoes,mostrar_Saldo,quantia_saque,conta,saldo_Insuficiente,error,quantia_Deposito};
+	
+
+ASSIGN
+
+	init(location) := idle;
+	
+
+	next(location) := case
+			(location = idle) & cartao: operacoes;
+			(location = operacoes) & saldo: mostrar_Saldo;
+			(location = mostrar_Saldo): operacoes;
+			(location = operacoes) & saque : quantia_saque;
+			(location = quantia_saque) & quantia : operacoes;
+			(location = quantia_saque) & !quantia : saldo_insuficiente;
+			(location = saldo_insuficiente) : idle;
+			(location = operacoes) & deposito : conta;
+			(location = conta) & codigo_conta : quantia_Deposito;
+			(location = conta) & !codigo_conta : error;
+			(location = quantia_Deposito) & quantia : operacoes;
+			(location = quantia_Deposito) & !quantia : error;
+			(location = error) : operacoes;
+			TRUE : idle
+			esac;
+			  
+			
+	
+
+
