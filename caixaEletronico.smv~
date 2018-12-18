@@ -29,8 +29,9 @@ ASSIGN
 			(location = quantia_Deposito) & quantia : operacoes;
 			(location = quantia_Deposito) & !quantia : error;
 			(location = error) : operacoes;
+			(location = operacoes) & sair : idle;
 			TRUE : idle
-			esac;
+		esac;
 			  
 			
 	
