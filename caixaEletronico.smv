@@ -26,8 +26,6 @@ ASSIGN
 			(location = quantia_saque) & !quantia : saldo_Insuficiente;
 			(location = saldo_Insuficiente) : idle;
 			(location = operacoes) & op_deposito : conta;
-			(location = quantia_saque) & !quantia : saldo_Insuficiente;
-			(location = saldo_Insuficiente) : idle;
 			(location = conta) & codigo_conta : quantia_Deposito;
 			(location = conta) & !codigo_conta : error;
 			(location = quantia_Deposito) & quantia : operacoes;
