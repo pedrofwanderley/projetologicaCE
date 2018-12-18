@@ -36,7 +36,8 @@ ASSIGN
 			esac;
 
 			  
-			
+SPEC
+	AG(cartao -> AF location != idle)	
 	
 
 
