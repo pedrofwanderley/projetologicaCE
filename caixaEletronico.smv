@@ -3,11 +3,13 @@ VAR
 	cartao:         boolean;
 	codigo_conta:   boolean;
 	quantia:        boolean;
-	saldo:          boolean;
-	sair:		boolean;
-	deposito:	boolean;
-	saque:		boolean;
+	op_saldo:       boolean;
+	op_sair:	boolean;
+	op_deposito:	boolean;
+	op_saque:	boolean;
 	location :      {idle,operacoes,mostrar_Saldo,quantia_saque,conta,saldo_Insuficiente,error,quantia_Deposito};
+
+
 	
 
 ASSIGN
@@ -17,21 +19,24 @@ ASSIGN
 
 	next(location) := case
 			(location = idle) & cartao: operacoes;
-			(location = operacoes) & saldo: mostrar_Saldo;
+			(location = operacoes) & op_saldo: mostrar_Saldo;
 			(location = mostrar_Saldo): operacoes;
-			(location = operacoes) & saque : quantia_saque;
+			(location = operacoes) & op_saque : quantia_saque;
 			(location = quantia_saque) & quantia : operacoes;
 			(location = quantia_saque) & !quantia : saldo_Insuficiente;
 			(location = saldo_Insuficiente) : idle;
-			(location = operacoes) & deposito : conta;
+			(location = operacoes) & op_deposito : conta;
+			(location = quantia_saque) & !quantia : saldo_Insuficiente;
+			(location = saldo_Insuficiente) : idle;
 			(location = conta) & codigo_conta : quantia_Deposito;
 			(location = conta) & !codigo_conta : error;
 			(location = quantia_Deposito) & quantia : operacoes;
 			(location = quantia_Deposito) & !quantia : error;
 			(location = error) : operacoes;
-			(location = operacoes) & sair : idle;
+			(location = operacoes) & op_sair : idle;
 			TRUE : idle;
-	esac;
+			esac;
+
 			  
 			
 	
