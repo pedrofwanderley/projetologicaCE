@@ -50,3 +50,9 @@ SPEC AG(location = operacoes -> EF op_sair)
 SPEC AG(location = operacoes -> EF op_saldo)
 SPEC AG(location = operacoes -> EF op_deposito)
 SPEC AG(location = operacoes -> EF op_saque)
+
+/-- Especificacoes que indicam que para algum caminho, mostra que todas as operações são subsequentes imediatas a operação "operacoes". --/
+SPEC EG(location = operacoes -> EX op_sair)
+SPEC EG(location = operacoes -> EX op_saldo)
+SPEC EG(location = operacoes -> EX op_deposito)
+SPEC EG(location = operacoes -> EX op_saque)
