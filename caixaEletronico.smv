@@ -44,3 +44,9 @@ SPEC AG((op_saldo & location = operacoes) -> EX location = mostrar_Saldo) /-- Es
 SPEC AG((!quantia & location = quantia_Deposito) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um deposito e mesmo sem ter saldo disponivel pretende ir para operacoes --/
 SPEC AG((!quantia & location = quantia_saque) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um saque e mesmo sem ter saldo disponivel pretende ir para operacoes --/
 
+/-- Especificacoes que indicam que para todos os caminhos, mostra que eh possivel realizar todas as operacoes caso vc esteja localizado no estado operacoes. --/
+
+SPEC AG(location = operacoes -> EF op_sair)
+SPEC AG(location = operacoes -> EF op_saldo)
+SPEC AG(location = operacoes -> EF op_deposito)
+SPEC AG(location = operacoes -> EF op_saque)
