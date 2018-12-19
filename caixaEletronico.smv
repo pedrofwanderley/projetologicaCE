@@ -56,3 +56,10 @@ SPEC EG(location = operacoes -> EX op_sair)
 SPEC EG(location = operacoes -> EX op_saldo)
 SPEC EG(location = operacoes -> EX op_deposito)
 SPEC EG(location = operacoes -> EX op_saque)
+
+/--Essa especificação vai gerar um contraexemplo, isso se da pois nela há uma afirmação de que sempre que para todos os caminhos a partir de operacoes, sempre chegará ao estado de erro --/
+
+SPEC AG(location = operacoes -> AG location = error)
+
+/-- Especificação correta --/
+SPEC EG(location = operacoes -> EF location = error)
