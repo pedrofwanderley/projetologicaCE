@@ -12,8 +12,11 @@ Requisitos para rodar: NuSMV
 Dentro do terminal do NuSMV, rodar os comandos:
 
 read_model -i caixaEletronico.smv
+
 flatten_hierarchy 
+
 encode_variables
+
 build_model
 
 - Para rodar as especificaçoes:
