@@ -2,12 +2,12 @@ MODULE main
 VAR
 	cartao:         boolean;
 	codigo_conta:   boolean;
-	quantia:        boolean;
+	saldo:          boolean;
 	op_saldo:       boolean;
 	op_sair:	boolean;
 	op_deposito:	boolean;
 	op_saque:	boolean;
-	location :      {idle,operacoes,mostrar_Saldo,quantia_saque,conta,saldo_Insuficiente,error,quantia_Deposito};
+	location :      {idle,operacoes,mostrar_Saldo,saldo_saque,conta,saldo_Insuficiente,conta_Inexistente,saldo_Deposito};
 
 
 	
@@ -21,28 +21,28 @@ ASSIGN
 			(location = idle) & cartao: operacoes;
 			(location = operacoes) & op_saldo: mostrar_Saldo;
 			(location = mostrar_Saldo): operacoes;
-			(location = operacoes) & op_saque : quantia_saque;
-			(location = quantia_saque) & quantia : operacoes;
-			(location = quantia_saque) & !quantia : saldo_Insuficiente;
+			(location = operacoes) & op_saque : saldo_saque;
+			(location = saldo_saque) & saldo : operacoes;
+			(location = saldo_saque) & !saldo : saldo_Insuficiente;
 			(location = saldo_Insuficiente) : operacoes;
 			(location = operacoes) & op_deposito : conta;
-			(location = conta) & codigo_conta : quantia_Deposito;
-			(location = conta) & !codigo_conta : error;
-			(location = quantia_Deposito) & quantia : operacoes;
-			(location = quantia_Deposito) & !quantia : saldo_Insuficiente;
-			(location = error) : operacoes;
+			(location = conta) & codigo_conta : saldo_Deposito;
+			(location = conta) & !codigo_conta : conta_Inexistente;
+			(location = saldo_Deposito) & saldo : operacoes;
+			(location = saldo_Deposito) & !saldo : saldo_Insuficiente;
+			(location = conta_Inexistente) : operacoes;
 			(location = operacoes) & op_sair : idle;
 			TRUE : idle;
 			esac;
 
 			  
 SPEC AG(cartao -> AF location != idle) /-- Especifica que para todos os caminhos, se uma pessoa inserir o cartao, o proximo estado vai ser sempre diferente de idle --/
-SPEC AG((!quantia & location = quantia_saque) -> EX location = saldo_Insuficiente) /-- Especifica que, para todos os caminhos onde a pessoa tentar realizar um saque e a quantia for invalida (saque maior que seu saldo) o proximo estado deve ser saldo_Insuficiente --/
-SPEC AG((!codigo_conta & location = conta) -> EX location = error) /-- Especifica que, para todos os caminhos, sempre que uma pessoa for realizar uma operacao na conta e o codigo fornecido for incorreto, o proximo estado sera o estado de erro. --/
-SPEC AG((!quantia & location = quantia_Deposito) -> EX location = saldo_Insuficiente) /-- Especifica que, para todos os caminhos onde a pessoa tentar realizar um deposito e a quantia for invalida (deposito em outra conta maior que seu saldo) o proximo estado deve ser saldo_Insuficiente --/
+SPEC AG((!saldo & location = saldo_saque) -> EX location = saldo_Insuficiente) /-- Especifica que, para todos os caminhos onde a pessoa tentar realizar um saque e o saldo for invalida (saque maior que seu saldo) o proximo estado deve ser saldo_Insuficiente --/
+SPEC AG((!codigo_conta & location = conta) -> EX location = conta_Inexistente) /-- Especifica que, para todos os caminhos, sempre que uma pessoa for realizar uma operacao na conta e o codigo fornecido for incorreto, o proximo estado sera o estado de erro. --/
+SPEC AG((!saldo & location = saldo_Deposito) -> EX location = saldo_Insuficiente) /-- Especifica que, para todos os caminhos onde a pessoa tentar realizar um deposito e o saldo for invalida (deposito em outra conta maior que seu saldo) o proximo estado deve ser saldo_Insuficiente --/
 SPEC AG((op_saldo & location = operacoes) -> EX location = mostrar_Saldo) /-- Especifica que, para todos os caminhos onde a pessoa tenta verificar o saldo, se a pessoa estiver em operacao, o proximo estado deve ser operacao --/
-SPEC AG((!quantia & location = quantia_Deposito) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um deposito e mesmo sem ter saldo disponivel pretende ir para operacoes --/
-SPEC AG((!quantia & location = quantia_saque) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um saque e mesmo sem ter saldo disponivel pretende ir para operacoes --/
+SPEC AG((!saldo & location = saldo_Deposito) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um deposito e mesmo sem ter saldo disponivel pretende ir para operacoes --/
+SPEC AG((!saldo & location = saldo_saque) -> EX location = operacoes) /-- Teste para quebrar, Testara fazer um saque e mesmo sem ter saldo disponivel pretende ir para operacoes --/
 
 /-- Especificacoes que indicam que para todos os caminhos, mostra que eh possivel realizar todas as operacoes caso vc esteja localizado no estado operacoes. --/
 
